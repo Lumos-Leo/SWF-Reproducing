@@ -11,15 +11,15 @@ Side Window Filtering Reproducing of Python Version
 * samples
 * 输入原始图像进行滤波结果
 
-![original](/Users/leo/Desktop/SWF/results/original.jpg)
+![original](/SWF/results/original.jpg)
 
-![filtering](/Users/leo/Desktop/SWF/results/filter.jpg)
+![filtering](/SWF/results/filter.jpg)
 
 * 输入椒盐噪声的滤波结果
 
-![origial](/Users/leo/Desktop/SWF/results/noise.jpg)
+![origial](/SWF/results/noise.jpg)
 
-![filteringNoise](/Users/leo/Desktop/SWF/results/filterNoise.jpg)
+![filteringNoise](/SWF/results/filterNoise.jpg)
 
 ## Implement Details
 
