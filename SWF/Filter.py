@@ -51,7 +51,7 @@ class Filter:
                 res[i, j] = tmp_sum // (end_h - start_h)
         return res
 
-    def boxFilterV2(self, img, radius_w, radius_h, radius):
+    def boxFilterV2(self, img, radius):
         height, width = img.shape
         buffer = np.zeros(width)
         sumCol = np.zeros(width)
@@ -101,7 +101,7 @@ class Filter:
         tmpH = 0
 
         for h in range(height):
-            # 计算radius "L"
+            # 计算radius
             radiusH = abs(radius_h[0] + radius_h[1] + 1)
             radiusW = abs(radius_w[0] + radius_w[1] + 1)
             startH = max(0, h-radius_h[0])
