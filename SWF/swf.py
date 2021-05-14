@@ -19,15 +19,15 @@ class SideWindowFiltering:
             for i in range(img.shape[2]):
                 fs = np.zeros((8,img.shape[0], img.shape[1]), dtype=np.float)
                 '''L,R,U,D,SW,SE,NW,NE'''
-                fs[0,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, 0), (self.radius, self.radius))
-                fs[1,:,:] = filter_.boxFilterModify(img[:,:,i], (0, self.radius), (self.radius, self.radius))
-                fs[2,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, self.radius), (self.radius, 0))
-                fs[3,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, self.radius), (0, self.radius))
-                fs[4,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, 0), (0, self.radius))
-                fs[5,:,:] = filter_.boxFilterModify(img[:,:,i], (0, self.radius), (0, self.radius))
-                fs[6,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, 0), (self.radius, 0))
-                fs[7,:,:] = filter_.boxFilterModify(img[:,:,i], (0, self.radius), (self.radius, 0))
-                # fs[0,:,:] = filter_.boxFilterModify(img[:,:,i], (self.radius, self.radius), (self.radius, self.radius))
+                fs[0,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (self.radius, 0), (self.radius, self.radius))
+                fs[1,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (0, self.radius), (self.radius, self.radius))
+                fs[2,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (self.radius, self.radius), (self.radius, 0))
+                fs[3,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (self.radius, self.radius), (0, self.radius))
+                fs[4,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (self.radius, 0), (0, self.radius))
+                fs[5,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (0, self.radius), (0, self.radius))
+                fs[6,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (self.radius, 0), (self.radius, 0))
+                fs[7,:,:] = filter_.boxFilterV2_sideWindow(img[:,:,i], (0, self.radius), (self.radius, 0))
+                # fs[0,:,:] = filter_.boxFilterV2(img[:,:,i], (self.radius, self.radius), (self.radius, self.radius), self.radius)
                 result[:,:,i] = self.getMinCostRes(img[:,:,i], fs)
 
         return result
