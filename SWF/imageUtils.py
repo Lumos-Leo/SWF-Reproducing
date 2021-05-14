@@ -22,8 +22,8 @@ class ImageUtils:
         cv.destroyAllWindows()
 
     def imgSave(self, imgNoise, imgFilter):
-        cv.imwrite('/Users/leo/Desktop/noise.jpg', imgNoise)
-        cv.imwrite('/Users/leo/Desktop/filterNoise.jpg', imgFilter)
+        cv.imwrite('./results/noise.jpg', imgNoise)
+        cv.imwrite('./results/filterNoise.jpg', imgFilter)
 
     def addNoise(self, img, num):
         # sault noise
@@ -38,7 +38,7 @@ class ImageUtils:
 
 if __name__ == '__main__':
     imageUtils = ImageUtils()
-    img = imageUtils.imgRead('/Users/leo/Documents/SWF/gakki.jpg')
+    img = imageUtils.imgRead('./results/gakki.jpg')
     img = imageUtils.imgResize(img)
     print(img.shape)
     img2 = np.zeros_like(img)
