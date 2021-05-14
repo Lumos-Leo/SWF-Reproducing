@@ -51,4 +51,111 @@ class Filter:
                 res[i, j] = tmp_sum // (end_h - start_h)
         return res
 
+    def boxFilterV2(self, img, radius_w, radius_h, radius):
+        height, width = img.shape
+        buffer = np.zeros(width)
+        sumCol = np.zeros(width)
+        A = np.zeros(img.shape)
+        tmpH = 0
+
+        for h in range(height):
+            # 初始边界处理
+            if (h < radius):
+                for w in range(width):
+                    buffer[w] = np.sum(img[0:h+radius,w])
+                tmpH = h+radius
+            # 末尾边界处理
+            elif (h >=height-radius+1):
+                buffer = buffer - img[h-1,:]
+                tmpH = height - h
+            else:
+            # 更新buffer
+                endH = np.min((height-radius+1, h+radius-1))
+                buffer = buffer - img[h-radius,:] + img[endH,:]
+                tmpH = endH - h  + radius
+
+            # 小于滑窗半径都是buffer相加
+            for w in range(radius):
+                if (w == 0):
+                    sumCol[w] = np.sum(buffer[w:radius])
+                    A[h][w] = sumCol[w]/((radius-w)*tmpH)
+                else:
+                    sumCol[w] = sumCol[w-1] + buffer[radius+w-1]
+                    A[h][w] = sumCol[w]/((radius+w)*tmpH)
+            # 中间部分有加有减
+            for w in range(radius, width-radius+1):
+                sumCol[w] = sumCol[w-1] + buffer[w+radius-1] - buffer[w-radius]
+                A[h][w] = sumCol[w]/ ((radius*2-1)*(tmpH)) 
+
+            # 后面边界部分全是buffer相减
+            for w in range(width-radius+1, width):
+                sumCol[w] = sumCol[w-1] - buffer[w-1]
+                A[h][w] = sumCol[w]/((width - w)*tmpH)
+        return A.astype("uint8")
+
+    def boxFilterV2_sideWindow(self, img, radius_w, radius_h):
+        height, width = img.shape
+        buffer = np.zeros(width)
+        sumCol = np.zeros(width)
+        A = np.zeros(img.shape)
+        tmpH = 0
+
+        for h in range(height):
+            # 计算radius "L"
+            radiusH = abs(radius_h[0] + radius_h[1] + 1)
+            radiusW = abs(radius_w[0] + radius_w[1] + 1)
+            startH = max(0, h-radius_h[0])
+            endH = min(height, h+radius_h[1])
+            tmpH = endH - startH + 1
+            # 初始边界处理
+            if (h == 0):
+                if (abs(startH - endH) < 1e-7):
+                    buffer[:] = img[startH, :]
+                    tmpH = 1
+                else:
+                    buffer[:] = np.sum(img[startH:endH+1, :], axis=0)
+                    
+            # 末尾边界处理
+            elif (h >= height - radius_h[1]):
+                buffer = buffer - img[startH-1, :]
+            # 中间过程处理
+            else:
+                if (startH == 0):
+                    buffer = buffer + img[endH, :]
+                else:
+                    buffer = buffer + img[endH, :] - img[startH-1, :]
+ 
+            for w in range(width):
+                startW = max(0, w-radius_w[0])
+                if (radius_w[1] == 0):
+                    endW = min(width, w+radius_w[1])
+                else:
+                    endW = min(width, w+radius_w[1])
+                # 小于滑窗半径都是buffer相加
+                if (w == 0):
+                    if (abs(startW - endW) < 1e-7):
+                        sumCol[w] = np.sum(buffer[startW])
+                        A[h][w] = sumCol[w]/(tmpH)
+                    else:
+                        sumCol[w] = np.sum(buffer[startW:endW+1])
+                        A[h][w] = sumCol[w]/(tmpH*(endW-startW+1))
+                # 后面边界部分全是buffer相减
+                elif (w >= width - radius_w[1]):
+                    sumCol[w] = sumCol[w-1] - buffer[startW-1]
+                    A[h][w] = sumCol[w]/(tmpH*(endW-startW+1))
+                # 中间部分有加有减
+                else:
+                    if (startW == 0):
+                        sumCol[w] = sumCol[w-1] + buffer[endW]
+                        A[h][w] = sumCol[w]/(tmpH*(endW-startW+1))
+                    else:
+                        sumCol[w] = sumCol[w-1] + buffer[endW] - buffer[startW-1]
+                        A[h][w] = sumCol[w]/(tmpH*(endW-startW+1))
+        return A.astype("uint8")
+
+            
+
+
+
+
             
