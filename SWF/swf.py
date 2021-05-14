@@ -57,7 +57,7 @@ if __name__ == "__main__":
     swf = SideWindowFiltering(3)
     imgUtils = ImageUtils()
     filter_ = Filter()
-    img = imgUtils.imgRead('/Users/leo/Desktop/SWF/results/noise.jpg')
+    img = imgUtils.imgRead('./results/noise.jpg')
     # img = imgUtils.imgResize(img)
     # imgNoise = imgUtils.addNoise(img, 3000)
     processImg = copy.deepcopy(img)
